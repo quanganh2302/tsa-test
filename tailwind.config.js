@@ -7,19 +7,31 @@ module.exports = {
         global: "#fafafa",
         primary: "#ce1628",
         secondary: "#db3b46",
-
+        buttonDisable: "#f5f5f5",
       },
-      boxShadow :{
-        button : "0 2px 0 rgba(0, 0, 0, 0.045)"
+      boxShadow: {
+        button: "0 2px 0 rgba(0, 0, 0, 0.045)",
+        examItem: "0 4px 20px rgba(0,0,0,.03)",
       },
       fontFamily: {
         Lato: ["Lato", "sans-serif"],
       },
       colors: {
+        primary: "#ce1628",
+        secondary: "#db3b46",
+        borderAuth: "#f5f5f5",
         authForm: "#252b2f",
+        textAuth: "#262626",
+        gray: "#8c8c8c",
+        borderDisable: "#d9d9d9",
+        textDisable: "rgba(0,0,0,.25)",
       },
+      // transformOrigin: {
+      //   model: "563.6px -23.6px",
+      // },
     },
     screens: {
+      xs: "380px",
       ss: "576px",
       sm: "768px",
       md: "992px",
