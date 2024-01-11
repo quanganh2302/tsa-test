@@ -24,8 +24,8 @@ const ExamList = () => {
           </Link>
         </div>
       </div>
-      <div className="bg-global p-6">
-        <div className="grid md:grid-cols-2 gird-cols-1 bg-[#f8f8f8] gap-4">
+      <div className="bg-[#fafafa] p-6">
+        <div className="grid md:grid-cols-2 gird-cols-1 bg-global gap-4">
           {exam.map((item) => (
             <ExamItem className="" key={item.nameExam} data={item} />
           ))}

@@ -1,5 +1,14 @@
 export const components = {
   button:
     "w-full bg-primary text-white min-h-[46px] text-[18px] font-normal hover:bg-secondary hover:border-primary hover:shadow-button outline-none ",
+  btnAnsDefault:
+    "rounded-full w-8 h-8 flex items-center justify-center text-[#808080] hover:font-semibold hover:border-borderDisable",
+  btnAnsBlue:
+    "rounded-full w-8 h-8 flex items-center justify-center text-white hover:font-semibold hover:border-borderDisable bg-[#007FFF]",
+  btnAnsYellow:
+    "rounded-full w-8 h-8 flex items-center justify-center text-white bg-[#FFBF00] hover:font-semibold hover:border-borderDisable",
+  btnAnsCurrent:
+    "rounded-full w-8 h-8 flex items-center justify-center text-white bg-darkBlue hover:border-borderDisable",
+
   titleH1: "text-[2rem] text-2xl leading-6 text-center",
 };

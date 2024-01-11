@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundColor: {
-        global: "#fafafa",
+        global: "#f8f8f8",
         primary: "#ce1628",
         secondary: "#db3b46",
         buttonDisable: "#f5f5f5",
@@ -23,6 +23,7 @@ module.exports = {
         authForm: "#252b2f",
         textAuth: "#262626",
         gray: "#8c8c8c",
+        darkBlue: "#011F5B",
         borderDisable: "#d9d9d9",
         textDisable: "rgba(0,0,0,.25)",
       },

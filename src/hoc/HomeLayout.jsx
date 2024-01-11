@@ -27,19 +27,19 @@ const HomeLayout = () => {
     {
       key: "1",
       label: (
-        <a className="flex items-center gap-2" href="#">
+        <Link className="flex items-center gap-2" to={"/tai-khoan"}>
           <UserOutlined />
           <p className="m-0">Tài khoản</p>
-        </a>
+        </Link>
       ),
     },
     {
       key: "2",
       label: (
-        <a className="flex items-center gap-2" href="#">
+        <Link className="flex items-center gap-2" href="#">
           <LogoutOutlined />
           <p className="m-0">Đăng xuất</p>
-        </a>
+        </Link>
       ),
     },
   ];
@@ -52,10 +52,16 @@ const HomeLayout = () => {
         collapsed={collapsed}
       >
         <div className="h-[64px] flex items-center border-b border-[#f0f0f0]">
-          <LogoFull
-            className={clsx(`${collapsed ? "hidden" : "block h-[32px] m-4"}`)}
+          <img
+            className={clsx(`${collapsed ? "hidden" : "block m-4 h-8"}`)}
+            src={require("../assets/logo-short.svg").default}
+            alt="logo-short"
           />
-          <LogoSquare className={collapsed ? "block h-[32px] m-4" : "hidden"} />
+          <img
+            className={clsx(`${collapsed ? "block m-4 h-8" : "hidden"}`)}
+            src={require("../assets/logo-square.svg").default}
+            alt="logo-square"
+          />
         </div>
         <Menu
           mode="inline"
@@ -86,7 +92,7 @@ const HomeLayout = () => {
             },
           ]}
         />
-        <Footer className="absolute bottom-2" />
+        <Footer className={collapsed ? "hidden" : "absolute bottom-2"} />
       </Sider>
       <Layout>
         <Header className=" bg-white p-0 flex items-center justify-between border-b border-[#f0f0f0]">

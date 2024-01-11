@@ -249,3 +249,15 @@ a:hover {
 .ant-menu-item:active {
   background-color: #ffccc7 !important;
 }
+
+//ANTD SLIDER CUSTOM
+
+.ant-slider-handle {
+  display: none;
+}
+
+.ant-slider-track {
+  background-color: #ce1628 !important;
+  height: 5px!important;
+  border-radius: 4px!important; 
+}
