@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Slider } from "antd";
+import { Slider, Modal, Button } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 import { chooseQuestion } from "../store/Exam/thunk";
 import HeaderExam from "../components/HeaderExam";
 import Footer from "../components/FooterExam";
@@ -8,11 +9,13 @@ import CircleArray from "../components/CircleArray";
 import QuestionContent from "../components/QuestionContent";
 import ExamRemainingTime from "../components/ExamRemainingTime";
 import mathQuestions from "../utils/question";
+
 const Exam1 = () => {
   const answers = useSelector((state) => state.examReducer.answers);
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
+  const indexSTT = useSelector((state) => state.examReducer.index);
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
   const onChange = (checked) => {
@@ -21,7 +24,18 @@ const Exam1 = () => {
   const [slider, setSlider] = useState(0);
   const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [intervalTime, setIntervalTime] = useState(3600);
+  const [open, setOpen] = useState(false);
 
+  const showModal = () => {
+    setOpen(true);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const dataQuestion = mathQuestions.find(({ id }) => id === currentQuestionId);
+  // const dataQuestion = mathQuestions[indexSTT];
+  const index = mathQuestions.findIndex((x) => x.id === dataQuestion?.id);
   useEffect(() => {
     const initialTime = setInterval(() => {
       setIntervalTime((prevSeconds) => prevSeconds - 1);
@@ -38,11 +52,29 @@ const Exam1 = () => {
     return setCurrentQuestionId(questionSelected);
   }, [questionSelected]);
 
+  // useEffect(() => {
+  //   if (!indexSTT) {
+  //     setCurrentQuestionId(1);
+  //   }
+  //   setCurrentQuestionId(indexSTT);
+  //   return setCurrentQuestionId(indexSTT);
+  // }, [indexSTT]);
+
   useEffect(() => {
-    setSlider(answers.length / mathQuestions.length * 100);
+    setSlider((answers.length / mathQuestions.length) * 100);
   }, [answers]);
 
-  const dataQuestion = mathQuestions.find(({ id }) => id === currentQuestionId);
+  const calculatorResult = (answers, mathQuestions) => {
+    let result = 0;
+    for (let i = 0; i < answers?.length; i++) {
+      const objCheck = mathQuestions.find(({ id }) => id === answers[i].id);
+      if (objCheck?.correctAnswer === answers[i].options) {
+        result++;
+      }
+    }
+    return result;
+  };
+
   return (
     <section className="bg-global h-full relative flex ">
       <div className="grow h-screen">
@@ -51,7 +83,7 @@ const Exam1 = () => {
           <div className="relative overflow-y-scroll max-h-[70vh] w-[95%] rounded-[8px] bg-white mx-auto my-6">
             {/* CONTENT EXAM AREA  */}
             <div className="h-[300px]">
-              <QuestionContent data={dataQuestion} />
+              <QuestionContent index={index} data={dataQuestion} />
             </div>
             {/* CONTENT EXAM AREA  */}
           </div>
@@ -109,6 +141,24 @@ const Exam1 = () => {
           </div>
         </div>
       </div>
+      <Button onClick={() => showModal()}>click me </Button>
+      <Modal
+        open={open}
+        // onOk={handleOk}
+        onCancel={handleCancel}
+        closeIcon={false}
+        className="relative max-w-[408px] top-1/2"
+        footer={[]}
+      >
+        <CloseOutlined
+          onClick={handleCancel}
+          className="block absolute top-[-55px] right-1/2 translate-x-1/2 bg-white rounded-full text-center leading-5 font-bold w-[1.5rem] h-[1.5rem]"
+        />
+
+        <div className=" p-6">
+          Bạn đã trả lời đúng:{calculatorResult(answers, mathQuestions)} câu{" "}
+        </div>
+      </Modal>
     </section>
   );
 };

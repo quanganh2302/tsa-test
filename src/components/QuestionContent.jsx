@@ -6,7 +6,7 @@ import { Button, Tooltip } from "antd";
 import { components } from "../styles";
 import { FlagOutlined } from "@ant-design/icons";
 
-const QuestionContent = ({ data }) => {
+const QuestionContent = ({ data, index }) => {
   const dispatch = useDispatch();
   const optionKeys = Object.keys(data.options);
   const optionValues = Object.values(data.options);
@@ -17,6 +17,7 @@ const QuestionContent = ({ data }) => {
   const [isConfuse, setIsConfuse] = useState(false);
   const [currentAns, setCurrentAns] = useState("");
   const yourAns = [...answers];
+
   const handleChooseAns = (ans) => {
     const answer = {
       id: data.id,
@@ -24,34 +25,46 @@ const QuestionContent = ({ data }) => {
       isSelected: true,
       isConfuse: false,
     };
-    if (yourAns.some(({ id }) => id === data.id)) {
-      const index = yourAns.findIndex(({ id }) => id === data.id);
-      yourAns.splice(index, 1, answer);
+    const existingAnswerIndex = yourAns.findIndex(({ id }) => id === data.id);
+    if (existingAnswerIndex !== -1) {
+      yourAns[existingAnswerIndex] = {
+        ...yourAns[existingAnswerIndex],
+        isSelected: true,
+        options: ans,
+      };
     } else {
       yourAns.push(answer);
     }
-    dispatch(chooseAnswer(yourAns));
+    dispatch(chooseAnswer([...yourAns]));
   };
-  // const handleConfuse = (ans) => {
-  //   const answer = {
-  //     id: data.id,
-  //     options: ans,
-  //     isSelected: true,
-  //     isConfuse: true,
-  //   };
-  //   if (yourAns.some(({ id }) => id === data.id)) {
-  //     const index = yourAns.findIndex(({ id }) => id === data.id);
-  //     // yourAns.isConfuse = false;
-  //     if ((yourAns.isConfuse = false)) {
-  //       yourAns.isConfuse = true;
-  //     } else {
-  //       yourAns.isConfuse = true;
-  //     }
-  //   } else {
-  //     yourAns.isConfuse = true;
-  //   }
-  //   dispatch(chooseAnswer(yourAns));
-  // };
+  const handleConfuse = () => {
+    const answer = {
+      id: data.id,
+      isConfuse: true,
+    };
+    const existingAnswerIndex = yourAns.findIndex(({ id }) => id === data.id);
+    if (existingAnswerIndex !== -1) {
+      if (yourAns[existingAnswerIndex].isConfuse) {
+        yourAns[existingAnswerIndex] = {
+          ...yourAns[existingAnswerIndex],
+          isConfuse: false,
+        };
+        setIsConfuse(false);
+      } else {
+        yourAns[existingAnswerIndex] = {
+          ...yourAns[existingAnswerIndex],
+          isConfuse: true,
+        };
+        setIsConfuse(true);
+      }
+    } else {
+      yourAns.push(answer);
+      setIsConfuse(true);
+    }
+    dispatch(chooseAnswer([...yourAns]));
+  };
+
+  // RENDER DATA ANSWER AFTER CHANGE QUESTION
   useEffect(() => {
     if (answers) {
       const answer = yourAns.find(({ id }) => id === data.id);
@@ -64,23 +77,10 @@ const QuestionContent = ({ data }) => {
       }
     }
     return () => {
+      setIsSelected(false);
       setIsConfuse(false);
     };
-  }, [answers]);
-
-  // RENDER DATA ANSWER AFTER CHANGE QUESTION
-  useEffect(() => {
-    if (answers) {
-      const answer = yourAns.find(({ id }) => id === data.id);
-      if (answer?.isSelected) {
-        setIsSelected(true);
-        setCurrentAns(answer?.options);
-      }
-    }
-    return () => {
-      setIsSelected(false);
-    };
-  }, [answers,data]);
+  }, [answers, data]);
 
   let answerArea = () => {
     const arr = [];
@@ -107,7 +107,7 @@ const QuestionContent = ({ data }) => {
 
   return (
     <section className="flex items-start justify-between pt-3 px-6 gap-4">
-      <Button className={clsx(components.btnAnsCurrent)}>{data.id}</Button>
+      <Button className={clsx(components.btnAnsCurrent)}>{index + 1}</Button>
       <div className="text-start grow">
         <div>{data.question}</div>
         <ul>{answerArea()}</ul>
@@ -115,6 +115,7 @@ const QuestionContent = ({ data }) => {
       <div className="">
         <Tooltip placement="top" title="Đánh dấu câu trả lời chưa chắc chắn">
           <Button
+            onClick={handleConfuse}
             className={clsx(
               isConfuse ? components.btnAnsYellow : components.btnAnsDefault
             )}

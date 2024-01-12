@@ -3,6 +3,7 @@ import actionTypes from "../actions/actionTypes";
 const initialState = {
   answers: [],
   questionSelected: 1,
+  index: 0,
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -11,6 +12,8 @@ const reducer = (state = initialState, { type, payload }) => {
       draft.answers = payload;
     } else if (type === actionTypes.CHOOSE_QUESTION) {
       draft.questionSelected = payload;
+    } else if (type === actionTypes.CHOOSE_INDEX) {
+      draft.index = payload;
     }
     return draft;
   });

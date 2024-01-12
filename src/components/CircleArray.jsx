@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { chooseQuestion } from "../store/Exam/thunk.js";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { chooseQuestion, chooseIndex } from "../store/Exam/thunk.js";
 import Circle from "./Circle";
 import { Button, Tooltip } from "antd";
 import { components } from "../styles.js";
@@ -10,6 +10,7 @@ const CircleArray = ({ className }) => {
   const dispatch = useDispatch();
   const handleChooseQuestion = (id) => {
     dispatch(chooseQuestion(id));
+    // dispatch(chooseIndex(id));
   };
   return (
     <section className={clsx("flex flex-col w-full", className)}>
@@ -28,11 +29,13 @@ const CircleArray = ({ className }) => {
         </div>
       </div>
       <div className="w-full grid grid-cols-8 gap-6 py-4">
-        {mathQuestions.map((item) => (
+        {mathQuestions.map((item, i) => (
           <Circle
+            // onClick={() => handleChooseQuestion(i)}
             onClick={() => handleChooseQuestion(item.id)}
+
             key={item.id}
-            number={item.id}
+            number={i + 1}
           />
         ))}
       </div>

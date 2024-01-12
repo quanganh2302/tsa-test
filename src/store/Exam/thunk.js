@@ -18,6 +18,17 @@ export const chooseQuestion = (id) => (dispatch) => {
       payload: id,
     });
   } catch (e) {
-    console.log(e)
+    console.log(e);
+  }
+};
+
+export const chooseIndex = (index) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.CHOOSE_INDEX,
+      payload: index,
+    });
+  } catch (e) {
+    console.log(e);
   }
 };
