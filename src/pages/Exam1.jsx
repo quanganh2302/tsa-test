@@ -55,6 +55,10 @@ const Exam1 = () => {
     return result;
   };
 
+  if (intervalTime <= 0) {
+    navigate("/ket-qua");
+  }
+
   const handleSubmit = () => {
     navigate("/ket-qua");
     // setOpen(true);

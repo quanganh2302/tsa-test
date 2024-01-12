@@ -26,6 +26,9 @@ const ExamCurrentTime = ({ currentTime, numberOfQuestion }) => {
   };
 
   const formatTime = (currentTime) => {
+    if ((currentTime > 3600)) {
+      return "60 : 00 ";
+    }
     currentTime = 3600 - currentTime;
     const minus = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;

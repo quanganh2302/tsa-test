@@ -3,6 +3,9 @@ import { Button } from "antd";
 import clsx from "clsx";
 const ExamRemainingTime = ({ className, currentTime, onclick }) => {
   const formatTime = (currentTime) => {
+    if( currentTime <= 0) {
+      return "00:00"
+    }
     const minus = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
     return `${String(minus).padStart(2, "0")} : ${String(seconds).padStart(
