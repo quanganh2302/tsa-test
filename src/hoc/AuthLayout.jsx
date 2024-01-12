@@ -6,7 +6,7 @@ import { ReactComponent as LogoFull } from "../assets/logo-full.svg";
 const AuthLayout = () => {
   return (
     <section
-      className=" h-full w-full bg-center bg-no-repeat bg-cover flex justify-center"
+      className=" h-screen w-full bg-center bg-no-repeat bg-cover flex justify-center"
       style={{ backgroundImage: `url(${Background})` }}
     >
       <div className="container-custom mt-20 justify-center relative flex">

@@ -11,22 +11,34 @@ export const chooseAnswer = (answer) => (dispatch) => {
   }
 };
 
-export const chooseQuestion = (id) => (dispatch) => {
+export const chooseQuestion = (index) => (dispatch) => {
   try {
     dispatch({
       type: actionTypes.CHOOSE_QUESTION,
-      payload: id,
+      payload: index,
     });
   } catch (e) {
     console.log(e);
   }
 };
 
-export const chooseIndex = (index) => (dispatch) => {
+export const submitAnswer = (score) => (dispatch) => {
   try {
     dispatch({
-      type: actionTypes.CHOOSE_INDEX,
-      payload: index,
+      type: actionTypes.SUBMIT_ANSWER,
+      payload: score,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+
+export const timeTodo = (time) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.TIME_TODO,
+      payload: time,
     });
   } catch (e) {
     console.log(e);

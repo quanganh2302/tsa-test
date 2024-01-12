@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp";
 import AuthLayout from "./hoc/AuthLayout.jsx";
 import ExamList from "./pages/ExamList.jsx";
 import Exam1 from "./pages/Exam1.jsx";
+import Result from "./pages/Result.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -26,8 +27,8 @@ function App() {
         <Route path="/tai-khoan" element={<HomeLayout />}>
           <Route path="/tai-khoan" element={<Profile />}></Route>
         </Route>
-        <Route path="/e1" element={<Exam1 />}>
-        </Route>
+        <Route path="/e1" element={<Exam1 />}></Route>
+        <Route path="/ket-qua" element={<Result />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Slider, Modal, Button } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
-import { chooseQuestion } from "../store/Exam/thunk";
+import { submitAnswer, timeTodo } from "../store/Exam/thunk";
 import HeaderExam from "../components/HeaderExam";
 import Footer from "../components/FooterExam";
 import CircleArray from "../components/CircleArray";
@@ -11,31 +12,26 @@ import ExamRemainingTime from "../components/ExamRemainingTime";
 import mathQuestions from "../utils/question";
 
 const Exam1 = () => {
+  const navigate = useNavigate();
   const answers = useSelector((state) => state.examReducer.answers);
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
-  const indexSTT = useSelector((state) => state.examReducer.index);
+
+  const yourAns = answers.filter(({ isSelected }) => isSelected === true);
   const dispatch = useDispatch();
   const [disabled, setDisabled] = useState(false);
   const onChange = (checked) => {
     setDisabled(checked);
   };
   const [slider, setSlider] = useState(0);
-  const [currentQuestionId, setCurrentQuestionId] = useState(1);
   const [intervalTime, setIntervalTime] = useState(3600);
   const [open, setOpen] = useState(false);
 
-  const showModal = () => {
-    setOpen(true);
-  };
   const handleCancel = () => {
     setOpen(false);
   };
-
-  const dataQuestion = mathQuestions.find(({ id }) => id === currentQuestionId);
-  // const dataQuestion = mathQuestions[indexSTT];
-  const index = mathQuestions.findIndex((x) => x.id === dataQuestion?.id);
+  const dataQuestion = mathQuestions[questionSelected];
   useEffect(() => {
     const initialTime = setInterval(() => {
       setIntervalTime((prevSeconds) => prevSeconds - 1);
@@ -45,34 +41,27 @@ const Exam1 = () => {
   }, []);
 
   useEffect(() => {
-    if (!questionSelected) {
-      setCurrentQuestionId(1);
-    }
-    setCurrentQuestionId(questionSelected);
-    return setCurrentQuestionId(questionSelected);
-  }, [questionSelected]);
-
-  // useEffect(() => {
-  //   if (!indexSTT) {
-  //     setCurrentQuestionId(1);
-  //   }
-  //   setCurrentQuestionId(indexSTT);
-  //   return setCurrentQuestionId(indexSTT);
-  // }, [indexSTT]);
-
-  useEffect(() => {
     setSlider((answers.length / mathQuestions.length) * 100);
   }, [answers]);
 
-  const calculatorResult = (answers, mathQuestions) => {
+  const calculatorResult = (yourAns, mathQuestions) => {
     let result = 0;
-    for (let i = 0; i < answers?.length; i++) {
-      const objCheck = mathQuestions.find(({ id }) => id === answers[i].id);
-      if (objCheck?.correctAnswer === answers[i].options) {
+    for (let i = 0; i < yourAns?.length; i++) {
+      const objCheck = mathQuestions.find(({ id }) => id === yourAns[i].id);
+      if (objCheck?.correctAnswer === yourAns[i].options) {
         result++;
       }
     }
     return result;
+  };
+
+  const handleSubmit = () => {
+    navigate("/ket-qua");
+    // setOpen(true);
+
+    const result = calculatorResult(yourAns, mathQuestions);
+    dispatch(timeTodo(3600 - intervalTime));
+    dispatch(submitAnswer(result));
   };
 
   return (
@@ -83,7 +72,7 @@ const Exam1 = () => {
           <div className="relative overflow-y-scroll max-h-[70vh] w-[95%] rounded-[8px] bg-white mx-auto my-6">
             {/* CONTENT EXAM AREA  */}
             <div className="h-[300px]">
-              <QuestionContent index={index} data={dataQuestion} />
+              <QuestionContent index={questionSelected} data={dataQuestion} />
             </div>
             {/* CONTENT EXAM AREA  */}
           </div>
@@ -109,7 +98,11 @@ const Exam1 = () => {
               <p>123456789</p>
             </div>
           </div>
-          <ExamRemainingTime currentTime={intervalTime} className="py-3 px-6" />
+          <ExamRemainingTime
+            onclick={() => setOpen(true)}
+            currentTime={intervalTime}
+            className="py-3 px-6"
+          />
           <CircleArray className="py-3 px-6" />
         </div>
         <div className="absolute bottom-10 w-full px-6 bg-white">
@@ -118,7 +111,7 @@ const Exam1 = () => {
               <p className="m-0 w-1/2 text-start">Bạn đã hoàn thành</p>
               <div className="m-0 w-1/2 text-end">
                 <div className="text-[24px] text-darkBlue font-semibold ">
-                  <p className="m-0 inline-block">{answers.length} /</p>{" "}
+                  <p className="m-0 inline-block">{yourAns.length} /</p>{" "}
                   <p className="m-0 inline-block">
                     {mathQuestions.length}{" "}
                     <span className="text-[14px] text-[#262626] font-normal">
@@ -132,22 +125,23 @@ const Exam1 = () => {
               <Slider
                 className="w-[95%]"
                 tooltip={{ title: "" }}
-                // defaultValue={0}
                 value={slider}
                 disabled={false}
               />
-              <p className="m-0 w-[5%]">0%</p>
+              <p className="m-0 w-[5%]">
+                {(yourAns.length / mathQuestions.length) * 100}%
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <Button onClick={() => showModal()}>click me </Button>
       <Modal
         open={open}
         // onOk={handleOk}
-        onCancel={handleCancel}
+        // confirmLoading={confirmLoading}
+        // onCancel={handleCancel}
         closeIcon={false}
-        className="relative max-w-[408px] top-1/2"
+        className="relative"
         footer={[]}
       >
         <CloseOutlined
@@ -155,8 +149,37 @@ const Exam1 = () => {
           className="block absolute top-[-55px] right-1/2 translate-x-1/2 bg-white rounded-full text-center leading-5 font-bold w-[1.5rem] h-[1.5rem]"
         />
 
-        <div className=" p-6">
-          Bạn đã trả lời đúng:{calculatorResult(answers, mathQuestions)} câu{" "}
+        <div className=" p-6 ">
+          <div className="flex flex-col items-center">
+            <div className="w-[100px] h-[100px] bg-red-500 rounded-full flex items-center justify-center">
+              <p className="m-0 text-white font-semibold text-[20px] text-center">
+                {yourAns.length} / {mathQuestions.length}
+                <br />
+                Câu
+              </p>
+            </div>
+            <p className="m-0 text-[#262626]">
+              Bạn vẫn còn thời gian làm bài, bạn có chắc muốn kết thúc bài thi?
+            </p>
+          </div>
+          <div className="flex justify-between gap-3 mt-6">
+            <div className="w-1/2">
+              <Button
+                onClick={handleCancel}
+                className="w-full min-h-[36px] bg-darkBlue border-darkBlue text-white rounded-[8px]"
+              >
+                Làm bài tiếp
+              </Button>
+            </div>
+            <div className="w-1/2">
+              <Button
+                onClick={handleSubmit}
+                className="w-full min-h-[36px] border bg-primary border-primary  rounded-[8px] text-white"
+              >
+                Nộp bài thi
+              </Button>
+            </div>
+          </div>
         </div>
       </Modal>
     </section>

@@ -21,6 +21,8 @@ const QuestionContent = ({ data, index }) => {
   const handleChooseAns = (ans) => {
     const answer = {
       id: data.id,
+      // index of Element in arr question
+      indexAns: index,
       options: ans,
       isSelected: true,
       isConfuse: false,
@@ -40,6 +42,7 @@ const QuestionContent = ({ data, index }) => {
   const handleConfuse = () => {
     const answer = {
       id: data.id,
+      indexAns: index,
       isConfuse: true,
     };
     const existingAnswerIndex = yourAns.findIndex(({ id }) => id === data.id);
@@ -82,6 +85,8 @@ const QuestionContent = ({ data, index }) => {
     };
   }, [answers, data]);
 
+
+
   let answerArea = () => {
     const arr = [];
     for (let i = 0; i < optionKeys.length; i++) {
@@ -91,7 +96,7 @@ const QuestionContent = ({ data, index }) => {
             onClick={() => handleChooseAns(optionKeys[i])}
             className={clsx(
               isSelected && optionKeys[i] === currentAns
-                ? components.btnAnsCurrent
+                ? components.btnAnsBlue
                 : components.btnAnsDefault,
               "uppercase"
             )}

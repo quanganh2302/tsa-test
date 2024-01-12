@@ -2,8 +2,9 @@ import { produce } from "immer";
 import actionTypes from "../actions/actionTypes";
 const initialState = {
   answers: [],
-  questionSelected: 1,
-  index: 0,
+  questionSelected: 0,
+  score: 0,
+  time: 0,
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -12,8 +13,10 @@ const reducer = (state = initialState, { type, payload }) => {
       draft.answers = payload;
     } else if (type === actionTypes.CHOOSE_QUESTION) {
       draft.questionSelected = payload;
-    } else if (type === actionTypes.CHOOSE_INDEX) {
-      draft.index = payload;
+    } else if (type === actionTypes.SUBMIT_ANSWER) {
+      draft.score = payload;
+    } else if (type === actionTypes.TIME_TODO) {
+      draft.time = payload;
     }
     return draft;
   });
