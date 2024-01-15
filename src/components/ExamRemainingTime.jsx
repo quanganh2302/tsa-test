@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import clsx from "clsx";
-const ExamRemainingTime = ({ className, currentTime, onclick }) => {
+const ExamRemainingTime = ({ className, currentTime, onclick, text }) => {
   const formatTime = (currentTime) => {
-    if( currentTime <= 0) {
-      return "00:00"
+    if (currentTime <= 0) {
+      return "00:00";
     }
     const minus = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
@@ -31,7 +31,7 @@ const ExamRemainingTime = ({ className, currentTime, onclick }) => {
         onClick={onclick}
         className="w-2/12 h-12 border bg-primary border-primary flex items-center justify-center rounded-[8px] "
       >
-        <p className="m-0 text-white">Nộp bài</p>
+        <p className="m-0 text-white">{text}</p>
       </Button>
     </section>
   );

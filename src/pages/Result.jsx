@@ -29,34 +29,36 @@ const Result = () => {
               <div className="">
                 <h2 className="text-[20px] font-semibold">Thông tin bài thi</h2>
                 <table className="mb-3">
-                  <tr>
-                    <td className="w-1/2  px-2 py-1">Họ tên</td>
-                    <td className="w-1/2  px-2 py-1">12315456789</td>
-                  </tr>
-                  <tr>
-                    <td className="w-1/2  px-2 py-1">Kíp thi</td>
-                    <td className="w-1/2  px-2 py-1">
-                      Thi thử ĐGTD - TSA 2024 - Toán
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="w-1/2  px-2 py-1">Thời gian</td>
-                    <td className="w-1/2  px-2 py-1">60 phút</td>
-                  </tr>
-                  <tr>
-                    <td className="w-1/2  px-2 py-1">
-                      Thời gian làm bài thực tế
-                    </td>
-                    <td className="w-1/2  px-2 py-1">{formatTime(time)}</td>
-                  </tr>
-                  <tr>
-                    <td className="w-1/2  px-2 py-1">
-                      Số câu trắc nghiệm đúng
-                    </td>
-                    <td className="w-1/2  px-2 py-1">
-                      {result}/{mathQuestions.length}
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr>
+                      <td className="w-1/2  px-2 py-1">Họ tên</td>
+                      <td className="w-1/2  px-2 py-1">12315456789</td>
+                    </tr>
+                    <tr>
+                      <td className="w-1/2  px-2 py-1">Kíp thi</td>
+                      <td className="w-1/2  px-2 py-1">
+                        Thi thử ĐGTD - TSA 2024 - Toán
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="w-1/2  px-2 py-1">Thời gian</td>
+                      <td className="w-1/2  px-2 py-1">60 phút</td>
+                    </tr>
+                    <tr>
+                      <td className="w-1/2  px-2 py-1">
+                        Thời gian làm bài thực tế
+                      </td>
+                      <td className="w-1/2  px-2 py-1">{formatTime(time)}</td>
+                    </tr>
+                    <tr>
+                      <td className="w-1/2  px-2 py-1">
+                        Số câu trắc nghiệm đúng
+                      </td>
+                      <td className="w-1/2  px-2 py-1">
+                        {result}/{mathQuestions.length}
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
                 <Link to={"/dang-nhap"} className="link text-[16px] underline">
                   Về trang đăng nhập

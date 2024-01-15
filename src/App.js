@@ -7,7 +7,9 @@ import SignUp from "./pages/SignUp";
 import AuthLayout from "./hoc/AuthLayout.jsx";
 import ExamList from "./pages/ExamList.jsx";
 import Exam1 from "./pages/Exam1.jsx";
+import Exam2 from "./pages/Exam2.jsx";
 import Result from "./pages/Result.jsx";
+import ReactDND from "./components/ReactDND.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -28,7 +30,9 @@ function App() {
           <Route path="/tai-khoan" element={<Profile />}></Route>
         </Route>
         <Route path="/e1" element={<Exam1 />}></Route>
+        <Route path="/e2-tu-luan" element={<Exam2 />}></Route>
         <Route path="/ket-qua" element={<Result />}></Route>
+        <Route path="/text-component" element={<ReactDND />}></Route>
       </Routes>
     </BrowserRouter>
   );

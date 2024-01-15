@@ -11,7 +11,7 @@ const ExamCurrentTime = ({ currentTime, numberOfQuestion }) => {
   );
   const dispatch = useDispatch();
   const handleNextQue = () => {
-    if (questionSelected < numberOfQuestion) {
+    if (questionSelected < numberOfQuestion - 1) {
       dispatch(chooseQuestion(questionSelected + 1));
     } else {
       return;
@@ -26,7 +26,7 @@ const ExamCurrentTime = ({ currentTime, numberOfQuestion }) => {
   };
 
   const formatTime = (currentTime) => {
-    if ((currentTime > 3600)) {
+    if (currentTime > 3600) {
       return "60 : 00 ";
     }
     currentTime = 3600 - currentTime;

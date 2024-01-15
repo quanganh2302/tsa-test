@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import _ from "lodash";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { chooseAnswer } from "../store/Exam/thunk";
@@ -17,8 +18,9 @@ const QuestionContent = ({ data, index }) => {
   const [isConfuse, setIsConfuse] = useState(false);
   const [currentAns, setCurrentAns] = useState("");
   const yourAns = [...answers];
-
+  const CAns = yourAns.find(({ id }) => id === data.id);
   const handleChooseAns = (ans) => {
+    // ans is object
     const answer = {
       id: data.id,
       // index of Element in arr question
@@ -32,8 +34,27 @@ const QuestionContent = ({ data, index }) => {
       yourAns[existingAnswerIndex] = {
         ...yourAns[existingAnswerIndex],
         isSelected: true,
-        options: ans,
       };
+      // yourAns[existingAnswerIndex].options = Object.assign(
+      //   { ...yourAns[existingAnswerIndex].options },
+      //   ans
+      // );
+      let draftObj = { ...yourAns[existingAnswerIndex].options };
+      let key = Object.keys(ans);
+      // const existingKeyAns = yourAns.options.find(({ options }) => options === key)
+      if (_.has(yourAns[existingAnswerIndex].options, key)) {
+        draftObj = _.omit(draftObj, Object.keys(ans));
+      } else {
+        draftObj = Object.assign(draftObj, ans);
+      }
+      yourAns[existingAnswerIndex].options = draftObj;
+      if (Object.keys(yourAns[existingAnswerIndex].options).length < 1) {
+        yourAns[existingAnswerIndex] = {
+          ...yourAns[existingAnswerIndex],
+          isSelected: false,
+        };
+      }
+      // console.log();
     } else {
       yourAns.push(answer);
     }
@@ -85,17 +106,17 @@ const QuestionContent = ({ data, index }) => {
     };
   }, [answers, data]);
 
-
-
   let answerArea = () => {
     const arr = [];
     for (let i = 0; i < optionKeys.length; i++) {
       arr.push(
         <li key={i} className="flex gap-2 items-center py-2">
           <Button
-            onClick={() => handleChooseAns(optionKeys[i])}
+            onClick={() =>
+              handleChooseAns({ [optionKeys[i]]: optionValues[i] })
+            }
             className={clsx(
-              isSelected && optionKeys[i] === currentAns
+              isSelected && _.has(CAns?.options, optionKeys[i])
                 ? components.btnAnsBlue
                 : components.btnAnsDefault,
               "uppercase"

@@ -10,7 +10,7 @@ const FooterExam = ({ className, currentTime, numberOfQuestion }) => {
   const dispatch = useDispatch();
   const [nextQuestion, setNextQuestion] = useState(questionSelected);
   const handleNextQue = () => {
-    if (questionSelected < numberOfQuestion) {
+    if (questionSelected < numberOfQuestion - 1) {
       setNextQuestion(questionSelected + 1);
       dispatch(chooseQuestion(nextQuestion));
     } else {
@@ -33,8 +33,8 @@ const FooterExam = ({ className, currentTime, numberOfQuestion }) => {
       )}
     >
       <ExamCurrentTime
-        // handlePrevQue={handlePrevQue}
-        // handleNextQue={handleNextQue}
+        handlePrevQue={handlePrevQue}
+        handleNextQue={handleNextQue}
         numberOfQuestion={numberOfQuestion}
         currentTime={currentTime}
       />

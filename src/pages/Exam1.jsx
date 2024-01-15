@@ -5,7 +5,7 @@ import { Slider, Modal, Button } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { submitAnswer, timeTodo } from "../store/Exam/thunk";
 import HeaderExam from "../components/HeaderExam";
-import Footer from "../components/FooterExam";
+import FooterExam from "../components/FooterExam";
 import CircleArray from "../components/CircleArray";
 import QuestionContent from "../components/QuestionContent";
 import ExamRemainingTime from "../components/ExamRemainingTime";
@@ -48,7 +48,7 @@ const Exam1 = () => {
     let result = 0;
     for (let i = 0; i < yourAns?.length; i++) {
       const objCheck = mathQuestions.find(({ id }) => id === yourAns[i].id);
-      if (objCheck?.correctAnswer === yourAns[i].options) {
+      if (objCheck?.correctAnswer === yourAns[i]?.options) {
         result++;
       }
     }
@@ -58,11 +58,10 @@ const Exam1 = () => {
   if (intervalTime <= 0) {
     navigate("/ket-qua");
   }
-
+  // console.log("yourAns", yourAns);  
   const handleSubmit = () => {
+    console.log(yourAns)
     navigate("/ket-qua");
-    // setOpen(true);
-
     const result = calculatorResult(yourAns, mathQuestions);
     dispatch(timeTodo(3600 - intervalTime));
     dispatch(submitAnswer(result));
@@ -81,7 +80,7 @@ const Exam1 = () => {
             {/* CONTENT EXAM AREA  */}
           </div>
         </div>
-        <Footer
+        <FooterExam
           numberOfQuestion={mathQuestions.length}
           currentTime={intervalTime}
           className="absolute bottom-0 w-full"
@@ -106,6 +105,7 @@ const Exam1 = () => {
             onclick={() => setOpen(true)}
             currentTime={intervalTime}
             className="py-3 px-6"
+            text="Nộp bài"
           />
           <CircleArray className="py-3 px-6" />
         </div>
@@ -133,21 +133,13 @@ const Exam1 = () => {
                 disabled={false}
               />
               <p className="m-0 w-[5%]">
-                {(yourAns.length / mathQuestions.length) * 100}%
+                {Math.floor((yourAns.length / mathQuestions.length) * 100)}%
               </p>
             </div>
           </div>
         </div>
       </div>
-      <Modal
-        open={open}
-        // onOk={handleOk}
-        // confirmLoading={confirmLoading}
-        // onCancel={handleCancel}
-        closeIcon={false}
-        className="relative"
-        footer={[]}
-      >
+      <Modal open={open} closeIcon={false} className="relative" footer={[]}>
         <CloseOutlined
           onClick={handleCancel}
           className="block absolute top-[-55px] right-1/2 translate-x-1/2 bg-white rounded-full text-center leading-5 font-bold w-[1.5rem] h-[1.5rem]"
