@@ -17,13 +17,19 @@ const CircleArray = ({ className }) => {
         <p className="m-0 ">Chỉ thị màu sắc: </p>
         <div className="flex items-center gap-4 justify-start">
           <Tooltip placement="top" title="Câu chưa trả lời">
-            <Button className={components.btnAnsDefault}>0</Button>
+            <Button className={clsx("rounded-full", components.btnAnsDefault)}>
+              0
+            </Button>
           </Tooltip>
           <Tooltip placement="top" title="Câu đã trả lời">
-            <Button className={components.btnAnsBlue}>0</Button>
+            <Button className={clsx("rounded-full", components.btnAnsBlue)}>
+              0
+            </Button>
           </Tooltip>
           <Tooltip placement="top" title="Câu chưa chắc chắn">
-            <Button className={components.btnAnsYellow}>0</Button>
+            <Button className={clsx("rounded-full", components.btnAnsYellow)}>
+              0
+            </Button>
           </Tooltip>
         </div>
       </div>

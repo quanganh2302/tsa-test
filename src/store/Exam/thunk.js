@@ -33,7 +33,6 @@ export const submitAnswer = (score) => (dispatch) => {
   }
 };
 
-
 export const timeTodo = (time) => (dispatch) => {
   try {
     dispatch({
@@ -44,3 +43,17 @@ export const timeTodo = (time) => (dispatch) => {
     console.log(e);
   }
 };
+
+// Start area thunk for dragging question
+export const detectSpace = (space) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.DETECT_SPACE,
+      payload: space,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+// End area thunk for dragging question

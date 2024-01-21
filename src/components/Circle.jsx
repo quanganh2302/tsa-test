@@ -39,7 +39,10 @@ const Circle = ({ className, index, onClick }) => {
     style = components.btnAnsDefault;
   }
   return (
-    <Button onClick={onClick} className={clsx(className, style)}>
+    <Button
+      onClick={onClick}
+      className={clsx(className, style, "rounded-full")}
+    >
       {index ? index + 1 : "1"}
     </Button>
   );

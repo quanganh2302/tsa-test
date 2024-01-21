@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { chooseQuestion } from "../store/Exam/thunk";
 
 import { Button } from "antd";
-const ExamCurrentTime = ({ currentTime, numberOfQuestion }) => {
+const ExamCurrentTime = ({ currentTime, totalTime, numberOfQuestion }) => {
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
@@ -26,10 +26,10 @@ const ExamCurrentTime = ({ currentTime, numberOfQuestion }) => {
   };
 
   const formatTime = (currentTime) => {
-    if (currentTime > 3600) {
+    if (currentTime > totalTime) {
       return "60 : 00 ";
     }
-    currentTime = 3600 - currentTime;
+    currentTime = totalTime - currentTime;
     const minus = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
     return `${String(minus).padStart(2, "0")} : ${String(seconds).padStart(

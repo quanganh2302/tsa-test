@@ -10,18 +10,34 @@ import QuestionContent from "../components/QuestionContent";
 import mathQuestions from "../utils/question";
 import ExamCurrentTime from "../components/ExamCurrentTime";
 import ExamRemainingTime from "../components/ExamRemainingTime";
+
+import demoQuestions from "../utils/demoData";
+import ContextDragging from "../components/drag-drop-question/ContextDragging";
+import ContextCR from "../components/constructed-response-question/ContextCR";
+import ContextSingle from "../components/single-answer-question/ContextSingle";
+import ContextTrueFalse from "../components/true-false-question/ContextTrueFalse";
+import ContextMultiple from "../components/multiple-answers-question/ContextMultiple";
 const Exam2 = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Data area -------------------------------------------------------------------------
+
   const answers = useSelector((state) => state.examReducer.answers);
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
 
-  const yourAns = answers.filter(({ isSelected }) => isSelected === true);
-  const dispatch = useDispatch();
+  const dataQuestion = mathQuestions[questionSelected];
+  // const yourAns = answers.filter(({ isSelected }) => isSelected === true);
+  // console.log(yourAns);
 
-  const [slider, setSlider] = useState(0);
-  const [intervalTime, setIntervalTime] = useState(1800);
+  const demoData = demoQuestions[0].questions;
+  // console.log(demoData);
+  // Data area -------------------------------------------------------------------------
+
+  // Modal feature area -------------------------------------------------------------------------
+
   const [openModal, setOpenModal] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const showDrawer = () => {
@@ -34,7 +50,30 @@ const Exam2 = () => {
   const handleCancelModal = () => {
     setOpenModal(false);
   };
-  const dataQuestion = mathQuestions[questionSelected];
+  // Modal feature area -------------------------------------------------------------------------
+
+  // Slider feature area -------------------------------------------------------------------------
+
+  const [slider, setSlider] = useState(0);
+  // useEffect(() => {
+  //   setSlider((answers.length / mathQuestions.length) * 100);
+  // }, [answers]);
+  // const calculatorResult = (yourAns, mathQuestions) => {
+  //   let result = 0;
+  //   for (let i = 0; i < yourAns?.length; i++) {
+  //     const objCheck = mathQuestions.find(({ id }) => id === yourAns[i].id);
+  //     if (objCheck?.correctAnswer === yourAns[i]?.options) {
+  //       result++;
+  //     }
+  //   }
+  //   return result;
+  // };
+
+  // Slider feature area -------------------------------------------------------------------------
+
+  // Time feature area -------------------------------------------------------------------------
+
+  const [intervalTime, setIntervalTime] = useState(1800);
   useEffect(() => {
     const initialTime = setInterval(() => {
       setIntervalTime((prevSeconds) => prevSeconds - 1);
@@ -43,31 +82,14 @@ const Exam2 = () => {
     return () => clearInterval(initialTime);
   }, []);
 
-  useEffect(() => {
-    setSlider((answers.length / mathQuestions.length) * 100);
-  }, [answers]);
-
-  const calculatorResult = (yourAns, mathQuestions) => {
-    let result = 0;
-    for (let i = 0; i < yourAns?.length; i++) {
-      const objCheck = mathQuestions.find(({ id }) => id === yourAns[i].id);
-      if (objCheck?.correctAnswer === yourAns[i]?.options) {
-        result++;
-      }
-    }
-    return result;
-  };
-
   if (intervalTime <= 0) {
     navigate("/ket-qua");
   }
-  // console.log("yourAns", yourAns);
   const handleSubmit = () => {
-    console.log(yourAns);
     navigate("/ket-qua");
-    const result = calculatorResult(yourAns, mathQuestions);
+    // const result = calculatorResult(yourAns, mathQuestions);
     dispatch(timeTodo(3600 - intervalTime));
-    dispatch(submitAnswer(result));
+    // dispatch(submitAnswer(result));
   };
 
   const formatTime = (currentTime) => {
@@ -81,22 +103,74 @@ const Exam2 = () => {
       "0"
     )}`;
   };
+  // Time feature area -------------------------------------------------------------------------
 
   return (
     <section className="bg-global h-screen relative ">
       <HeaderExam />
-      <div className=" w-full bg-global">
-        <div className="relative overflow-y-scroll max-h-[70vh] w-[95%] rounded-[8px] bg-white mx-auto my-6">
+      <div className=" w-full bg-global flex">
+        <div className="w-1/2 relative overflow-y-auto max-h-[70vh] rounded-[8px] bg-white mx-auto my-6">
           {/* CONTENT EXAM AREA  */}
-          <div className="h-[300px]">
-            <QuestionContent index={questionSelected} data={dataQuestion} />
+          <div className="h-full flex flex-col w/full">
+            <h3>This is result</h3>
+            <div>{JSON.stringify(answers)}</div>
+
+            {/* <QuestionContent index={questionSelected} data={dataQuestion} /> */}
           </div>
           {/* CONTENT EXAM AREA  */}
         </div>
+        {/* ANSWER AREA -----------------------------------------------------------------------  */}
+        <div className="w-1/2 bg-white rounded-[8px] max-h-[70vh] my-6 p-4 overflow-y-auto">
+          {demoData.map((item) => {
+            // console.log(item);
+            if (item.type === "Dragging") {
+              return (
+                <ContextDragging
+                  className={" p-3 rounded border border-borderDisable"}
+                  data={item}
+                  key={item.questionId}
+                />
+              );
+            } else if (item.type === "SingleAnswer") {
+              return (
+                <ContextSingle
+                  className={" p-3 rounded border border-borderDisable"}
+                  data={item}
+                  key={item.questionId}
+                />
+              );
+            } else if (item.type === "MultipleAnswers") {
+              return (
+                <ContextMultiple
+                  className={" p-3 rounded border border-borderDisable"}
+                  data={item}
+                  key={item.questionId}
+                />
+              );
+            } else if (item.type === "True/False") {
+              return (
+                <ContextTrueFalse
+                  className={" p-3 rounded border border-borderDisable"}
+                  data={item}
+                  key={item.questionId}
+                />
+              );
+            } else if (item.type === "ConstructedResponse") {
+              return (
+                <ContextCR
+                  className={" p-3 rounded border border-borderDisable"}
+                  data={item}
+                  key={item.questionId}
+                />
+              );
+            }
+          })}
+        </div>
+        {/* ANSWER AREA -----------------------------------------------------------------------  */}
       </div>
 
       <footer className="absolute bottom-0 w-full px-12 min-h-[80px] bg-white flex items-center justify-between">
-        <ExamCurrentTime currentTime={intervalTime} />
+        <ExamCurrentTime totalTime={1800} currentTime={intervalTime} />
         <div className="flex items-center justify-between w-[400px] gap-2">
           <div className="h-12 w-8/12 flex items-center justify-between py-1 px-1 border border-borderDisable rounded-[8px]">
             <p className="m-0 w-7/12">Thời gian còn lại: </p>
@@ -129,7 +203,7 @@ const Exam2 = () => {
           <div className="flex flex-col items-center">
             <div className="w-[100px] h-[100px] bg-red-500 rounded-full flex items-center justify-center">
               <p className="m-0 text-white font-semibold text-[20px] text-center">
-                {yourAns.length} / {mathQuestions.length}
+                {/* {yourAns.length} / {mathQuestions.length} */}
                 <br />
                 Câu
               </p>
@@ -194,7 +268,9 @@ const Exam2 = () => {
                 <p className="m-0 w-1/2 text-start">Bạn đã hoàn thành</p>
                 <div className="m-0 w-1/2 text-end">
                   <div className="text-[24px] text-darkBlue font-semibold ">
-                    <p className="m-0 inline-block">{yourAns.length} /</p>{" "}
+                    <p className="m-0 inline-block">
+                      {/* {yourAns.length} / */}
+                    </p>
                     <p className="m-0 inline-block">
                       {mathQuestions.length}{" "}
                       <span className="text-[14px] text-[#262626] font-normal">
@@ -212,7 +288,7 @@ const Exam2 = () => {
                   disabled={false}
                 />
                 <p className="m-0 w-[5%]">
-                  {Math.floor((yourAns.length / mathQuestions.length) * 100)}%
+                  {/* {Math.floor((yourAns.length / mathQuestions.length) * 100)}% */}
                 </p>
               </div>
             </div>

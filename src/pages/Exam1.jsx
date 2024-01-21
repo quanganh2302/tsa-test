@@ -14,6 +14,7 @@ import mathQuestions from "../utils/question";
 const Exam1 = () => {
   const navigate = useNavigate();
   const answers = useSelector((state) => state.examReducer.answers);
+  console.log(answers)
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );

@@ -35,13 +35,9 @@ const QuestionContent = ({ data, index }) => {
         ...yourAns[existingAnswerIndex],
         isSelected: true,
       };
-      // yourAns[existingAnswerIndex].options = Object.assign(
-      //   { ...yourAns[existingAnswerIndex].options },
-      //   ans
-      // );
       let draftObj = { ...yourAns[existingAnswerIndex].options };
       let key = Object.keys(ans);
-      // const existingKeyAns = yourAns.options.find(({ options }) => options === key)
+      // kiểm tra đã có đáp án đó hay chưa, nếu có thì thay thế, không có thì bổ sung
       if (_.has(yourAns[existingAnswerIndex].options, key)) {
         draftObj = _.omit(draftObj, Object.keys(ans));
       } else {
