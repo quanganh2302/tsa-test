@@ -38,6 +38,17 @@ export const selectQuestion = (index) => (dispatch) => {
   }
 };
 
+export const totalQuestion = (number) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.NUMBER_OF_QUESTION,
+      payload: number,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const submitAnswer = (score) => (dispatch) => {
   try {
     dispatch({

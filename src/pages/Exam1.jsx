@@ -12,9 +12,12 @@ import CircleArray from "../components/CircleArray";
 import ContextSingle from "../components/single-answer-question/ContextSingle";
 import ExamRemainingTime from "../components/ExamRemainingTime";
 import mathQuestions from "../utils/question";
-import { selectQuestion, selectGroupQuestion } from "../store/Exam/thunk";
+import {
+  selectQuestion,
+  selectGroupQuestion,
+  totalQuestion,
+} from "../store/Exam/thunk";
 const Exam1 = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // Data area -------------------------------------------------------------------------
@@ -50,6 +53,7 @@ const Exam1 = () => {
       .slice(-1)[0]
       .questions.slice(-1)[0].ordinalNumber;
     setNumberOfQuestion(number);
+    dispatch(totalQuestion(number));
     setNewData(groupQuestion);
   };
   useEffect(() => {

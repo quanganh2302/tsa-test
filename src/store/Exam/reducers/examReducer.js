@@ -8,6 +8,7 @@ const initialState = {
   time: 0,
   nameOfExam: "",
   timeOfExam: 0,
+  numberOfQuestion: 0,
 };
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -26,6 +27,8 @@ const reducer = (state = initialState, { type, payload }) => {
       draft.nameOfExam = payload;
     } else if (type === actionTypes.CHOOSE_EXAM_TIME) {
       draft.timeOfExam = payload;
+    } else if (type === actionTypes.NUMBER_OF_QUESTION) {
+      draft.numberOfQuestion = payload;
     } else if (type === actionTypes.CLEAR_DATA) {
       return (draft = initialState);
     }

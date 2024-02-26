@@ -13,6 +13,9 @@ const Result = () => {
   const nameOfExam = useSelector((state) => state.examReducer.nameOfExam);
   const timeOfExam = useSelector((state) => state.examReducer.timeOfExam);
   const time = useSelector((state) => state.examReducer.time);
+  const numberOfQuestion = useSelector(
+    (state) => state.examReducer.numberOfQuestion
+  );
 
   const formatTime = (currentTime) => {
     const minus = Math.floor(currentTime / 60);
@@ -70,7 +73,7 @@ const Result = () => {
                         Số câu trắc nghiệm đúng
                       </td>
                       <td className="w-1/2  px-2 py-1">
-                        {result ? result : 0}/{mathQuestions.length}
+                        {result ? result : 0}/{numberOfQuestion}
                       </td>
                     </tr>
                   </tbody>

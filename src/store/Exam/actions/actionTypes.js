@@ -5,6 +5,7 @@ const actionTypes = Object.freeze({
   SELECT_QUESTION: "SELECT_QUESTION",
   SUBMIT_ANSWER: "SUBMIT_ANSWER",
   TIME_TODO: "TIME_TODO",
+  NUMBER_OF_QUESTION: "NUMBER_OF_QUESTION",
   // Question
   // Exam
   CHOOSE_EXAM: " CHOOSE_EXAM",

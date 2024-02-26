@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Slider, Modal, Button, Drawer } from "antd";
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
-import { submitAnswer, timeTodo } from "../store/Exam/thunk";
+import { submitAnswer, timeTodo, totalQuestion } from "../store/Exam/thunk";
 import HeaderExam from "../components/HeaderExam";
 import CircleArray from "../components/CircleArray";
 import ExamCurrentTime from "../components/ExamCurrentTime";
@@ -29,7 +29,6 @@ const Exam2 = () => {
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
-
   // Number of question feature area -------------------------------------------------------------------------
   const [numberOfQuestion, setNumberOfQuestion] = useState(0);
   const [numberOfGroupQuestion, setNumberOfGroupQuestion] = useState(0);
@@ -56,12 +55,12 @@ const Exam2 = () => {
       .slice(-1)[0]
       .questions.slice(-1)[0].ordinalNumber;
     setNumberOfQuestion(number);
+    dispatch(totalQuestion(number));
     setNewData(groupQuestion);
     setNumberOfGroupQuestion(demoQuestions?.length);
   };
   useEffect(() => {
     bunchData();
-    // dispatch(selectGroupQuestion(0));
   }, []);
   // Number of question feature area -------------------------------------------------------------------------
 
@@ -70,7 +69,6 @@ const Exam2 = () => {
   // );
 
   // const dataToRenderQuestionList = groupQuestionSelected?.questions;
-
   const dataToRenderQuestionList =
     newData[groupQuestionSelected - 1]?.questions;
 
