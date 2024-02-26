@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
-import { useSelector, useDispatch } from "react-redux";
-import { chooseQuestion } from "../store/Exam/thunk";
+import { useDispatch } from "react-redux";
+import { selectGroupQuestion } from "../store/Exam/thunk";
 
 import { Button } from "antd";
-const ExamCurrentTime = ({ currentTime, totalTime, numberOfQuestion }) => {
-  const questionSelected = useSelector(
-    (state) => state.examReducer.questionSelected
-  );
+const ExamCurrentTime = (props) => {
+  const {
+    currentTime,
+    totalTime,
+    numberOfGroupQuestion,
+    groupQuestionSelected,
+  } = props;
+
   const dispatch = useDispatch();
   const handleNextQue = () => {
-    if (questionSelected < numberOfQuestion - 1) {
-      dispatch(chooseQuestion(questionSelected + 1));
+    if (groupQuestionSelected < numberOfGroupQuestion - 1) {
+      dispatch(selectGroupQuestion(groupQuestionSelected + 1));
     } else {
       return;
     }
   };
   const handlePrevQue = () => {
-    if (questionSelected > 1) {
-      dispatch(chooseQuestion(questionSelected - 1));
+    if (groupQuestionSelected > 0) {
+      dispatch(selectGroupQuestion(groupQuestionSelected - 1));
     } else {
       return;
     }
   };
-
   const formatTime = (currentTime) => {
     if (currentTime > totalTime) {
       return "60 : 00 ";
@@ -42,7 +45,9 @@ const ExamCurrentTime = ({ currentTime, totalTime, numberOfQuestion }) => {
       <div className="w-4/12 h-full flex items-center justify-between gap-2 ">
         <Button
           onClick={handlePrevQue}
-          disabled={questionSelected && questionSelected > 1 ? false : true}
+          disabled={
+            groupQuestionSelected && groupQuestionSelected > 0 ? false : true
+          }
           className="w-4/12 h-12 border border-borderDisable bg-buttonDisable flex items-center justify-center rounded-[8px] hover:font-bold hover:border-borderDisable hover:text-[#808080] "
         >
           <LeftOutlined />

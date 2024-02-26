@@ -4,22 +4,25 @@ import clsx from "clsx";
 import { components } from "../styles";
 import { useSelector } from "react-redux";
 
-const Circle = ({ className, index, onClick }) => {
+const Circle = ({ className, ordinalNumber, onClick }) => {
   const questionSelected = useSelector(
     (state) => state.examReducer.questionSelected
   );
-  const answers = useSelector((state) => state.examReducer.answers);
+
+  const allAnswers = useSelector((state) => state.examReducer.answers);
+  const yourAnswer = [...allAnswers];
   const [isSelected, setIsSelected] = useState(false);
   const [isConfuse, setIsConfuse] = useState(false);
   let style = "";
-
   useEffect(() => {
-    if (answers) {
-      const answer = answers.find(({ indexAns }) => indexAns === index);
-      if (answer?.isConfuse) {
+    if (yourAnswer) {
+      const currentAns = yourAnswer?.find(
+        ({ answerId }) => answerId === ordinalNumber
+      );
+      if (currentAns?.isConfuse) {
         setIsConfuse(true);
         setIsSelected(false);
-      } else if (answer?.isSelected) {
+      } else if (currentAns?.isSelected) {
         setIsSelected(true);
       }
     }
@@ -27,9 +30,9 @@ const Circle = ({ className, index, onClick }) => {
       setIsSelected(false);
       setIsConfuse(false);
     };
-  }, [answers, questionSelected]);
+  }, [yourAnswer, questionSelected]);
 
-  if (questionSelected === index) {
+  if (questionSelected === ordinalNumber) {
     style = components.btnAnsCurrent;
   } else if (isConfuse) {
     style = components.btnAnsYellow;
@@ -43,7 +46,7 @@ const Circle = ({ className, index, onClick }) => {
       onClick={onClick}
       className={clsx(className, style, "rounded-full")}
     >
-      {index ? index + 1 : "1"}
+      {ordinalNumber}
     </Button>
   );
 };

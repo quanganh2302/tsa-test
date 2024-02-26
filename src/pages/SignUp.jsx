@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button, Form, Input } from "antd";
 import { components } from "../styles";
+import { signUp } from "../store/Auth/thunk";
 const SignUp = () => {
+  const userInfo = useSelector((state) => state.authReducer.userIsSignUp);
+  const dispatch = useDispatch();
+
   const onFinish = (values) => {
-    console.log("Success:", values);
+    dispatch(signUp(values));
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

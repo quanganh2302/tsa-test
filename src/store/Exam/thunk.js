@@ -11,10 +11,26 @@ export const chooseAnswer = (answer) => (dispatch) => {
   }
 };
 
-export const chooseQuestion = (index) => (dispatch) => {
+//  selectQuestion la function lua chon cau hoi hien tai cho dang
+//  data arr trong 1 object
+
+export const selectGroupQuestion = (id) => (dispatch) => {
   try {
     dispatch({
-      type: actionTypes.CHOOSE_QUESTION,
+      type: actionTypes.SELECT_GROUP_QUESTION,
+      payload: id,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+//  selectQuestion la function lua chon cau hoi hien tai cho dang
+//  data single arr
+export const selectQuestion = (index) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.SELECT_QUESTION,
       payload: index,
     });
   } catch (e) {
@@ -44,16 +60,26 @@ export const timeTodo = (time) => (dispatch) => {
   }
 };
 
-// Start area thunk for dragging question
-export const detectSpace = (space) => (dispatch) => {
+// Exam
+
+export const chooseExam = (title) => (dispatch) => {
   try {
     dispatch({
-      type: actionTypes.DETECT_SPACE,
-      payload: space,
+      type: actionTypes.CHOOSE_EXAM,
+      payload: title,
     });
   } catch (e) {
     console.log(e);
   }
 };
 
-// End area thunk for dragging question
+export const chooseExamTime = (time) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.CHOOSE_EXAM_TIME,
+      payload: time,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

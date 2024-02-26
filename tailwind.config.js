@@ -26,6 +26,8 @@ module.exports = {
         darkBlue: "#011F5B",
         borderDisable: "#d9d9d9",
         textDisable: "rgba(0,0,0,.25)",
+        success: "#2eb553",
+        successHover: "#4fc26a"
       },
       // transformOrigin: {
       //   model: "563.6px -23.6px",

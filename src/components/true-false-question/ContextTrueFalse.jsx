@@ -4,30 +4,31 @@ import _ from "lodash";
 import { Button } from "antd";
 import { chooseAnswer } from "../../store/Exam/thunk";
 import { components } from "../../styles";
+import TitleQues from "../question/TitleQues";
 
 const ContextTrueFalse = (props) => {
-  const { data } = props;
+  const { data, ordinalNumber } = props;
   const { question } = data;
-  //   console.log(question)
   const dispatch = useDispatch();
 
   const allAnswers = useSelector((state) => state.examReducer.answers);
   const yourAnswer = [...allAnswers];
+
   const currentAns = yourAnswer?.find(
-    ({ questionId }) => questionId === data.questionId
+    ({ answerId }) => answerId === data.ordinalNumber
   );
-  const [isConfuse, setIsConfuse] = useState(false);
 
   const handleChooseAns = (questionData, ans) => {
     const chooseAns = {
-      questionId: data.questionId,
+      groupId: data.groupId,
+      answerId: data.ordinalNumber,
       answer: [{ id: questionData.id, answer: ans, isChildrenSelected: true }],
       isSelected: true,
       isConfuse: false,
     };
 
     const existingAnswerIndex = yourAnswer.findIndex(
-      ({ questionId }) => questionId === data.questionId
+      ({ answerId }) => answerId === data.ordinalNumber
     );
     // Check current answer has been selected or not
     if (existingAnswerIndex !== -1) {
@@ -94,18 +95,19 @@ const ContextTrueFalse = (props) => {
 
   return (
     <section className={props.className}>
-      <h2 className="text-[16px] font-semibold">
-        This is a demo True/False question :
-      </h2>
-      <div>
-        <div className="flex justify-between">
-          <div></div>
-          <div className="flex gap-2">
-            <h3 className="w-8">True</h3>
-            <h3 className="w-8">False</h3>
+      <TitleQues ordinalNumber={ordinalNumber} data={data} />
+      <div className="flex gap-4">
+        <div className="w-8"></div>
+        <div className="grow">
+          <div className="flex justify-between">
+            <div></div>
+            <div className="flex gap-2">
+              <h3 className="w-8">True</h3>
+              <h3 className="w-8">False</h3>
+            </div>
           </div>
+          <ul>{renderAnswer()}</ul>
         </div>
-        <ul>{renderAnswer()}</ul>
       </div>
     </section>
   );

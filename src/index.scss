@@ -267,3 +267,11 @@ a:hover {
 .ant-drawer-content-wrapper{
   width: 480px!important;
 }
+
+// ANTD FORM CUSTOM
+
+.profile-form .ant-form-item-label {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}

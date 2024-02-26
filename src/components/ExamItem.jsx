@@ -3,10 +3,13 @@ import { clsx } from "clsx";
 import { Button, Modal, Tag } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { chooseExam, chooseExamTime } from "../store/Exam/thunk";
 
 const ExamItem = ({ data }, className) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const dispatch = useDispatch();
   const showModal = () => {
     setOpen(true);
   };
@@ -20,6 +23,17 @@ const ExamItem = ({ data }, className) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const handleChooseMatchExam = () => {
+    dispatch(chooseExam("Tư duy Toán học"));
+    dispatch(chooseExamTime(3600));
+
+  };
+  const handleChooseCRExam = () => {
+    dispatch(chooseExam("Tư duy Đọc hiểu"));
+    dispatch(chooseExamTime(1800));
+
+  };
+
   return (
     <section
       className={clsx(
@@ -63,14 +77,16 @@ const ExamItem = ({ data }, className) => {
           className={clsx(
             `${
               data.isSignUp
-                ? "bg-primary text-white border-primary hover:bg-secondary"
+                ? "bg-success text-white border-success hover:bg-successHover hover:border-successHover"
                 : "bg-buttonDisable border-borderDisable text-textDisable"
             }  `
           )}
         >
-          {data.isSignUp ? "Đăng ký" : "Hết hạn đăng ký"}
+          {data.isSignUp ? "Vào thi ngay" : "Hết hạn đăng ký"}
         </Button>
       </div>
+      {/* 
+      Modal while the user is not logged in
       <Modal
         open={open}
         onOk={handleOk}
@@ -103,6 +119,48 @@ const ExamItem = ({ data }, className) => {
                 Đăng nhập
               </Link>
             </div>
+          </div>
+        </div>
+      </Modal>
+      */}
+      <Modal
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        closeIcon={false}
+        className="relative w-[680px] -translate-y-1/2 top-1/2"
+        footer={[]}
+      >
+        <CloseOutlined
+          onClick={handleCancel}
+          className="block absolute top-[-55px] right-1/2 translate-x-1/2 bg-white rounded-full text-center leading-5 font-bold w-[1.5rem] h-[1.5rem]"
+        />
+
+        <div className=" p-6">
+          <p className="text-center font-semibold text-[24px]">Chọn phần thi</p>
+          <div className="flex flex-col gap-2 items-center justify-center">
+            <Link
+              onClick={handleChooseMatchExam}
+              to={"/e1"}
+              className="block text-center w-full bg-primary text-white min-h-[40px] text-[14px] leading-[40px] font-normal hover:bg-secondary hover:border-primary hover:shadow-button outline-none rounded-[6px]"
+            >
+              Tư duy Toán học
+            </Link>
+            <Link
+              onClick={handleChooseCRExam}
+              to={"/e2-tu-luan"}
+              className="block text-center w-full bg-primary text-white min-h-[40px] text-[14px] leading-[40px] font-normal hover:bg-secondary hover:border-primary hover:shadow-button outline-none rounded-[6px]"
+            >
+              Tư duy Đọc hiểu
+            </Link>
+            <Link
+              onClick={handleChooseCRExam}
+              to={"/e3"}
+              className="block text-center w-full bg-primary text-white min-h-[40px] text-[14px] leading-[40px] font-normal hover:bg-secondary hover:border-primary hover:shadow-button outline-none rounded-[6px]"
+            >
+              Tư duy Khoa học/Giải quyết vấn đề
+            </Link>
           </div>
         </div>
       </Modal>

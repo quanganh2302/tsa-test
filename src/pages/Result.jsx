@@ -1,13 +1,18 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useSelector } from "react-redux";
 import Background from "../assets/bg-page-login.png";
 import { ReactComponent as LogoFull } from "../assets/logo-full.svg";
 import { Link } from "react-router-dom";
 import mathQuestions from "../utils/question";
+import { useNavigate } from "react-router-dom";
 
 const Result = () => {
+  const navigate = useNavigate()
   const result = useSelector((state) => state.examReducer.score);
+  const nameOfExam = useSelector((state) => state.examReducer.nameOfExam);
+  const timeOfExam = useSelector((state) => state.examReducer.timeOfExam);
   const time = useSelector((state) => state.examReducer.time);
+
   const formatTime = (currentTime) => {
     const minus = Math.floor(currentTime / 60);
     const seconds = currentTime % 60;
@@ -16,6 +21,10 @@ const Result = () => {
       "0"
     )}`;
   };
+
+  window.addEventListener('popstate', navigate("/"));
+
+
   return (
     <section
       className=" h-screen w-full bg-center bg-no-repeat bg-cover flex justify-center"
@@ -37,12 +46,14 @@ const Result = () => {
                     <tr>
                       <td className="w-1/2  px-2 py-1">Kíp thi</td>
                       <td className="w-1/2  px-2 py-1">
-                        Thi thử ĐGTD - TSA 2024 - Toán
+                        Thi thử ĐGTD - TSA 2024 - {nameOfExam}
                       </td>
                     </tr>
                     <tr>
                       <td className="w-1/2  px-2 py-1">Thời gian</td>
-                      <td className="w-1/2  px-2 py-1">60 phút</td>
+                      <td className="w-1/2  px-2 py-1">
+                        {timeOfExam / 60} phút
+                      </td>
                     </tr>
                     <tr>
                       <td className="w-1/2  px-2 py-1">
@@ -55,7 +66,7 @@ const Result = () => {
                         Số câu trắc nghiệm đúng
                       </td>
                       <td className="w-1/2  px-2 py-1">
-                        {result}/{mathQuestions.length}
+                        {result ? result : 0}/{mathQuestions.length}
                       </td>
                     </tr>
                   </tbody>

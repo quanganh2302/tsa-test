@@ -1,38 +1,27 @@
 import React, { useState, useEffect } from "react";
+import clsx from "clsx";
+import { components } from "../../styles";
 import { useSelector, useDispatch } from "react-redux";
 import { chooseAnswer } from "../../store/Exam/thunk";
-import { Input } from "antd";
+import { Input, Tooltip, Button } from "antd";
+import TitleQues from "../question/TitleQues";
+
 const ContextCR = (props) => {
-  const { data } = props;
+  const { data, ordinalNumber } = props;
   const allAnswers = useSelector((state) => state.examReducer.answers);
   const yourAnswer = [...allAnswers];
 
   const currentAns = yourAnswer?.find(
-    ({ questionId }) => questionId === data.questionId
+    ({ answerId }) => answerId === data.ordinalNumber
   );
-
   const questionContent = data.question.split(/\[\[(\d+)\]\]/).filter(Boolean);
 
   const number = data.question.match(/\d+/g).map(Number);
 
   const dispatch = useDispatch();
 
-  const [answer, setAnswer] = useState(["-1", "-1"]);
-
-  // useEffect(() => {
-  //   const answerDefault = [...answer];
-  //   if (!currentAns) {
-  //     number.map((item, i) => answerDefault.splice(i, 1, "-1"));
-  //     setAnswer(answerDefault);
-  //   } else {
-  //     number.map((item, i) =>
-  //       currentAns.answer[i] === "-1" || currentAns.answer[i] !== ""
-  //         ? answerDefault.splice(i, 1, "-1")
-  //         : answerDefault.splice(i, 1, currentAns.answer[i])
-  //     );
-  //     setAnswer(answerDefault);
-  //   }
-  // }, [allAnswers]);
+  // answer default ["-1","-1",...]
+  const [answer, setAnswer] = useState([]);
 
   useEffect(() => {
     const answerDefault = [...answer];
@@ -47,7 +36,10 @@ const ContextCR = (props) => {
       );
       setAnswer(answerDefault);
     }
-  }, [allAnswers]);
+    return () => {
+      setAnswer([""]);
+    };
+  }, [currentAns, ordinalNumber]);
 
   const handleOnChange = (e) => {
     const newAns = [...answer];
@@ -65,13 +57,14 @@ const ContextCR = (props) => {
 
   const handleChooseAns = (ans) => {
     const chooseAns = {
-      questionId: data.questionId,
+      groupId: data.groupId,
+      answerId: data.ordinalNumber,
       answer: ans,
       isSelected: true,
       isConfuse: false,
     };
     const existingAnswerIndex = yourAnswer.findIndex(
-      ({ questionId }) => questionId === data.questionId
+      ({ answerId }) => answerId === data.ordinalNumber
     );
     if (existingAnswerIndex !== -1) {
       yourAnswer[existingAnswerIndex] = {
@@ -96,6 +89,9 @@ const ContextCR = (props) => {
             className="w-[200px]"
             key={i}
             name={`answer${j}`}
+            value={
+              answer[j - 1] !== "-1" && answer[j - 1] ? answer[j - 1] : ""
+            }
           />
         );
       } else {
@@ -105,12 +101,13 @@ const ContextCR = (props) => {
   };
 
   return (
-    <section className={props.className}>
-      <h2 className="text-[16px] font-semibold">
-        This is a demo question for dragging:
-      </h2>
-      <div className=" flex items-center flex-wrap gap-2 p-4 align-middle">
-        {renderQuestion()}
+    <section className={clsx(props.className)}>
+      <TitleQues ordinalNumber={ordinalNumber} data={data} />
+      <div className="flex gap-2">
+        <div className="w-8"></div>
+        <div className=" flex items-center flex-wrap gap-2 p-4 align-middle">
+          {renderQuestion()}
+        </div>
       </div>
     </section>
   );

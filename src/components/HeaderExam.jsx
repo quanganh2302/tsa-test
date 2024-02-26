@@ -1,6 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import clsx from "clsx";
 const HeaderExam = ({ className }) => {
+  const nameOfExam = useSelector((state) => state.examReducer.nameOfExam);
   return (
     <header
       className={clsx(
@@ -14,7 +16,7 @@ const HeaderExam = ({ className }) => {
         alt="logo-short"
       />
       <h2 className="m-0 font-bold text-[18px]">
-        Thi thử ĐGTD - TSA 2024 - Khoa học và giải quyết vấn đề
+        Thi thử ĐGTD - TSA 2024 - {nameOfExam ? nameOfExam : ""}
       </h2>
     </header>
   );

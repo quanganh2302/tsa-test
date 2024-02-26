@@ -134,18 +134,17 @@ const QuestionContent = ({ data, index }) => {
         <div>{data.question}</div>
         <ul>{answerArea()}</ul>
       </div>
-      <div className="">
-        <Tooltip placement="top" title="Đánh dấu câu trả lời chưa chắc chắn">
-          <Button
-            onClick={handleConfuse}
-            className={clsx(
-              isConfuse ? components.btnAnsYellow : components.btnAnsDefault
-            )}
-          >
-            <FlagOutlined />
-          </Button>
-        </Tooltip>
-      </div>
+
+      <Tooltip placement="top" title="Đánh dấu câu trả lời chưa chắc chắn">
+        <Button
+          onClick={handleConfuse}
+          className={clsx(
+            isConfuse ? components.btnAnsYellow : components.btnAnsDefault
+          )}
+        >
+          <FlagOutlined />
+        </Button>
+      </Tooltip>
     </section>
   );
 };

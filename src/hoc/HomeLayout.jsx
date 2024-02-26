@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import { ReactComponent as LogoFull } from "../assets/logo-short.svg";
-import { ReactComponent as LogoSquare } from "../assets/logo-square.svg";
-
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -15,11 +12,18 @@ import {
   LogoutOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme, Dropdown, Space } from "antd";
+import { Layout, Menu, Button, theme, Dropdown } from "antd";
 import Footer from "../components/Footer";
+import { useDispatch } from "react-redux";
+import { isLogin } from "../store/Auth/thunk";
 const { Header, Sider, Content } = Layout;
 const HomeLayout = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [collapsed, setCollapsed] = useState(true);
+  const handleLogout = () => {
+    dispatch(isLogin(false));
+  };
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -27,7 +31,11 @@ const HomeLayout = () => {
     {
       key: "1",
       label: (
-        <Link className="flex items-center gap-2" to={"/tai-khoan"}>
+        <Link
+          onClick={() => navigate("/tai-khoan")}
+          className="flex items-center gap-2"
+          to={"/tai-khoan"}
+        >
           <UserOutlined />
           <p className="m-0">Tài khoản</p>
         </Link>
@@ -36,7 +44,11 @@ const HomeLayout = () => {
     {
       key: "2",
       label: (
-        <Link className="flex items-center gap-2" href="#">
+        <Link
+          onClick={handleLogout}
+          className="flex items-center gap-2"
+          to={"/dang-nhap"}
+        >
           <LogoutOutlined />
           <p className="m-0">Đăng xuất</p>
         </Link>
@@ -44,7 +56,7 @@ const HomeLayout = () => {
     },
   ];
   return (
-    <Layout>
+    <Layout className="min-h-screen">
       <Sider
         className="bg-white border-r border-[#f0f0f0] relative"
         trigger={null}
@@ -127,7 +139,7 @@ const HomeLayout = () => {
                   src={require("../assets/userAvateDefault.png")}
                   alt="userAvatar"
                 />
-                <p className="m-0">userId</p>
+                <p className="m-0">demo_account@gmail.com</p>
                 <DownOutlined className="text-[12px] mt-1" />
               </div>
             </Dropdown>

@@ -5,21 +5,22 @@ import { Button } from "antd";
 import { chooseAnswer } from "../../store/Exam/thunk";
 import clsx from "clsx";
 import { components } from "../../styles";
+import TitleQues from "../question/TitleQues";
 
 const ContextSingle = (props) => {
-  const { data } = props;
+  const { data, ordinalNumber } = props;
   const dispatch = useDispatch();
 
   const allAnswers = useSelector((state) => state.examReducer.answers);
   const yourAnswer = [...allAnswers];
   const optionKeys = Object.keys(data.options);
   const optionValues = Object.values(data.options);
+
+  // Select answer data of component to render answer
+
   const currentAns = yourAnswer?.find(
-    ({ questionId }) => questionId === data.questionId
+    ({ answerId }) => answerId === data.ordinalNumber
   );
-  const [isSelected, setIsSelected] = useState(false);
-  const [isConfuse, setIsConfuse] = useState(false);
-  const [answer, setAnswer] = useState([]);
 
   const renderAnswer = () => {
     const arr = [];
@@ -29,7 +30,8 @@ const ContextSingle = (props) => {
           <Button
             onClick={() => handleChooseAns(optionKeys[i])}
             className={clsx(
-              isSelected && currentAns?.answer.indexOf(optionKeys[i]) !== -1
+              currentAns?.isSelected &&
+                currentAns?.answer.indexOf(optionKeys[i]) !== -1
                 ? components.btnAnsBlue
                 : components.btnAnsDefault,
               "uppercase rounded-full"
@@ -46,13 +48,14 @@ const ContextSingle = (props) => {
 
   const handleChooseAns = (ans) => {
     const chooseAns = {
-      questionId: data.questionId,
+      groupId: data.groupId,
+      answerId: data.ordinalNumber,
       answer: ans,
       isSelected: true,
       isConfuse: false,
     };
     const existingAnswerIndex = yourAnswer.findIndex(
-      ({ questionId }) => questionId === data.questionId
+      ({ answerId }) => answerId === data.ordinalNumber
     );
     if (existingAnswerIndex !== -1) {
       yourAnswer[existingAnswerIndex] = {
@@ -65,29 +68,15 @@ const ContextSingle = (props) => {
     }
     dispatch(chooseAnswer([...yourAnswer]));
   };
-  useEffect(() => {
-    if (allAnswers) {
-      if (currentAns?.isSelected) {
-        setIsSelected(true);
-        setAnswer(currentAns?.answer);
-      }
-      if (currentAns?.isConfuse) {
-        setIsConfuse(true);
-      }
-    }
-    return () => {
-      setIsSelected(false);
-      setIsConfuse(false);
-    };
-  }, [allAnswers, data]);
 
   return (
     <section className={props.className}>
-      <h2 className="text-[16px] font-semibold">
-        This is a demo single answer question :
-      </h2>
+      <TitleQues ordinalNumber={ordinalNumber} data={data} />
       <div>{data.question}</div>
-      <ul>{renderAnswer()}</ul>
+      <div className="flex gap-4">
+        <div className="w-8"></div>
+        <ul>{renderAnswer()}</ul>
+      </div>
     </section>
   );
 };

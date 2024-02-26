@@ -4,14 +4,15 @@ import { chooseAnswer } from "../../store/Exam/thunk";
 import { DndContext } from "@dnd-kit/core";
 import Blank from "./Blank";
 import Answer from "./Answer";
+import TitleQues from "../question/TitleQues";
 
 const ContextDragging = (props) => {
-  const { data } = props;
+  const { data, ordinalNumber } = props;
   const allAnswers = useSelector((state) => state.examReducer.answers);
   const yourAnswer = [...allAnswers];
 
   const currentAns = yourAnswer?.find(
-    ({ questionId }) => questionId === data.questionId
+    ({ answerId }) => answerId === data.ordinalNumber
   );
 
   const questionContent = data.question.split(/\[\[(\d+)\]\]/).filter(Boolean);
@@ -35,15 +36,15 @@ const ContextDragging = (props) => {
       setListAns(optionKeys);
     } else {
       number.map((item, i) =>
-        currentAns.answer[i] !== "-1"
-          ? answerDefault.splice(i, 1, currentAns.answer[i])
-          : answerDefault.splice(i, 1, "-1")
+        currentAns.answer[i] === "-1" || currentAns.answer[i] === ""
+          ? answerDefault.splice(i, 1, "-1")
+          : answerDefault.splice(i, 1, currentAns.answer[i])
       );
       setAnswer(answerDefault);
       const newList = [...optionKeys];
       setListAns(newList?.filter((x) => !currentAns.answer.includes(x)));
     }
-  }, [allAnswers]);
+  }, [allAnswers, ordinalNumber]);
 
   const renderQuestion = () => {
     // Use variable j to synchronize blankId in client with server
@@ -65,7 +66,7 @@ const ContextDragging = (props) => {
               <Answer
                 // className={"border-primary m-1"}
                 id={answer[j - 1]}
-                questionId={data.questionId}
+                answerId={data.ordinalNumber}
                 optionKey={answer[j - 1]}
                 text={optionValues[optionKeys.indexOf(answer[j - 1])]}
               />
@@ -82,10 +83,10 @@ const ContextDragging = (props) => {
     for (let i = 0; i < listAns?.length; i++) {
       arr.push(
         <Answer
-          // id={`${data.questionId}${optionKeys[i]}`}
+          // id={`${data.answerId}${optionKeys[i]}`}
           // su dung index lam id ( id = 0 khong co tac dung)
           id={listAns[i]}
-          questionId={data.questionId}
+          answerId={data.ordinalNumber}
           key={i}
           optionKey={listAns[i]}
           text={optionValues[optionKeys.indexOf(listAns[i])]}
@@ -135,13 +136,14 @@ const ContextDragging = (props) => {
   const handleChooseAns = (ans) => {
     // ans is object
     const chooseAns = {
-      questionId: data.questionId,
+      groupId: data.groupId,
+      answerId: data.ordinalNumber,
       answer: ans,
       isSelected: true,
       isConfuse: false,
     };
     const existingAnswerIndex = yourAnswer.findIndex(
-      ({ questionId }) => questionId === data.questionId
+      ({ answerId }) => answerId === data.ordinalNumber
     );
     if (existingAnswerIndex !== -1) {
       yourAnswer[existingAnswerIndex] = {
@@ -151,7 +153,7 @@ const ContextDragging = (props) => {
     } else {
       yourAnswer.push(chooseAns);
     }
-    dispatch(chooseAnswer(yourAnswer));
+    dispatch(chooseAnswer([...yourAnswer]));
   };
   return (
     <section className={props.className}>
@@ -160,14 +162,17 @@ const ContextDragging = (props) => {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <h2 className="text-[16px] font-semibold">
-          This is a demo question for dragging:
-        </h2>
-        <div className="p-4 flex flex-wrap gap-2 border border-dashed border-slate-300 rounded-[8px]">
-          {renderAnswer()}
-        </div>
-        <div className=" flex items-center flex-wrap gap-2 p-4 align-middle">
-          {renderQuestion()}
+        <TitleQues ordinalNumber={ordinalNumber} data={data} />
+        <div className="flex gap-4">
+          <div className="w-8"></div>
+          <div className="grow">
+            <div className="p-4 flex flex-wrap gap-2 border border-dashed border-slate-300 rounded-[8px]">
+              {renderAnswer()}
+            </div>
+            <div className=" flex items-center flex-wrap gap-2 p-4 align-middle">
+              {renderQuestion()}
+            </div>
+          </div>
         </div>
       </DndContext>
     </section>
