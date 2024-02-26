@@ -3,7 +3,7 @@ import actionTypes from "../actions/actionTypes";
 const initialState = {
   answers: [],
   questionSelected: 0,
-  groupQuestionSelected: 0,
+  groupQuestionSelected: 1,
   score: 0,
   time: 0,
   nameOfExam: "",

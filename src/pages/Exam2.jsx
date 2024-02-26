@@ -71,7 +71,8 @@ const Exam2 = () => {
 
   // const dataToRenderQuestionList = groupQuestionSelected?.questions;
 
-  const dataToRenderQuestionList = newData[groupQuestionSelected]?.questions;
+  const dataToRenderQuestionList =
+    newData[groupQuestionSelected - 1]?.questions;
 
   // Data area -------------------------------------------------------------------------
 
