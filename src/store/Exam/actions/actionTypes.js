@@ -10,6 +10,8 @@ const actionTypes = Object.freeze({
   CHOOSE_EXAM: " CHOOSE_EXAM",
   CHOOSE_EXAM_TIME: "CHOOSE_EXAM_TIME",
   // Exam
+
+  CLEAR_DATA : "CLEAR_DATA"
 });
 
 export default actionTypes;

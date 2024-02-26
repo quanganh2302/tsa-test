@@ -83,3 +83,14 @@ export const chooseExamTime = (time) => (dispatch) => {
     console.log(e);
   }
 };
+
+export const clearData = (data) => (dispatch) => {
+  try {
+    dispatch({
+      type: actionTypes.CLEAR_DATA,
+      payload: data,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

@@ -1,13 +1,14 @@
-import React, {useEffect} from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Background from "../assets/bg-page-login.png";
 import { ReactComponent as LogoFull } from "../assets/logo-full.svg";
 import { Link } from "react-router-dom";
 import mathQuestions from "../utils/question";
 import { useNavigate } from "react-router-dom";
-
+import { clearData } from "../store/Exam/thunk";
 const Result = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const result = useSelector((state) => state.examReducer.score);
   const nameOfExam = useSelector((state) => state.examReducer.nameOfExam);
   const timeOfExam = useSelector((state) => state.examReducer.timeOfExam);
@@ -22,8 +23,11 @@ const Result = () => {
     )}`;
   };
 
-  window.addEventListener('popstate', navigate("/"));
+  window.addEventListener("popstate", navigate("/"));
 
+  const handleClearData = () => {
+    dispatch(clearData());
+  };
 
   return (
     <section
@@ -71,7 +75,11 @@ const Result = () => {
                     </tr>
                   </tbody>
                 </table>
-                <Link to={"/dang-nhap"} className="link text-[16px] underline">
+                <Link
+                  onClick={handleClearData}
+                  to={"/dang-nhap"}
+                  className="link text-[16px] underline"
+                >
                   Về trang đăng nhập
                 </Link>
               </div>
